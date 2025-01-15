@@ -1,0 +1,80 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Constructor Normal Number of Players
+      id: constructor-normal-number-of-players
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Constructor Normal Number of Players
+        setup-command: ''
+        command: gradle test --tests TokenPassTest.testConstructorNormal
+        timeout: 2
+        max-score: 1
+    - name: Constructor Too Low Number of Players
+      id: constructor-too-low-number-of-players
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Constructor Too Low Number of Players
+        setup-command: ''
+        command: gradle test --tests TokenPassTest.testConstructorTooLow
+        timeout: 2
+        max-score: 1
+    - name: Constructor Too High Number of Players
+      id: constructor-too-high-number-of-players
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Constructor Too High Number of Players
+        setup-command: ''
+        command: gradle test --tests TokenPassTest.testConstructorTooHigh
+        timeout: 2
+        max-score: 1
+    - name: Token Count in Bounds
+      id: token-count-in-bounds
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Token Count in Bounds
+        setup-command: ''
+        command: gradle test --tests TokenPassTest.testTokenCountInBounds
+        timeout: 2
+        max-score: 1
+    - name: Board Total Matches Token Count
+      id: board-total-matches-token-count
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Board Total Matches Token Count
+        setup-command: ''
+        command: gradle test --tests TokenPassTest.testTotalofBoardMatchesTokenCount
+        timeout: 2
+        max-score: 1
+    - name: Get Winner
+      id: get-winner
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Get Winner
+        setup-command: ''
+        command: gradle test --tests TokenPassTest.testGetWinner
+        timeout: 2
+        max-score: 1
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        CONSTRUCTOR-NORMAL-NUMBER-OF-PLAYERS_RESULTS: "${{steps.constructor-normal-number-of-players.outputs.result}}"
+        CONSTRUCTOR-TOO-LOW-NUMBER-OF-PLAYERS_RESULTS: "${{steps.constructor-too-low-number-of-players.outputs.result}}"
+        CONSTRUCTOR-TOO-HIGH-NUMBER-OF-PLAYERS_RESULTS: "${{steps.constructor-too-high-number-of-players.outputs.result}}"
+        TOKEN-COUNT-IN-BOUNDS_RESULTS: "${{steps.token-count-in-bounds.outputs.result}}"
+        BOARD-TOTAL-MATCHES-TOKEN-COUNT_RESULTS: "${{steps.board-total-matches-token-count.outputs.result}}"
+        GET-WINNER_RESULTS: "${{steps.get-winner.outputs.result}}"
+      with:
+        runners: constructor-normal-number-of-players,constructor-too-low-number-of-players,constructor-too-high-number-of-players,token-count-in-bounds,board-total-matches-token-count,get-winner
