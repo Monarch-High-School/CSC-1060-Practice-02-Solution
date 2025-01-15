@@ -15,8 +15,8 @@ class TokenPassTest {
 
     @Test
     public void testConstructorNormal() {
-        int expected = 5;
-        int actual = tp.playerCount();
+        int expected = 6;
+        int actual = tp.getPlayerCount();
         assertEquals(expected, tp.getPlayerCount(), "The number of players should be " + expected + ", but got " + actual);
     }
 
@@ -61,7 +61,7 @@ class TokenPassTest {
     public void testGetWinner() {
             // play 10 times to see if the winner is accurately computed
         for (int i = 0; i < 10; i++) {
-            int majority = tp.getTokenCount / 2 + 1;
+            int majority = tp.getTokenCount() / 2 + 1;
             tp.play();
             int actual = tp.getWinner();
             int expected = -1;
